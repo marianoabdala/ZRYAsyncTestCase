@@ -32,7 +32,6 @@
 
 - (void)testPerformURLDownload {
 
-
     NSURL *url =
     [NSURL URLWithString:@"https://raw.github.com/marianoabdala/ZRYAsyncTestCase/master/Resources/Kato.jpg"];
     
@@ -48,12 +47,27 @@
 
     [self.connection start];
     
-    ZRYAssertPerformsBeforeTimout(20.0f, @"Failed to get any results in time.");
+    ZRYAssertPerformsBeforeTimout(20.0f, @"Failed to download image in time.");
     
     UIImage *downloadedImage =
     [UIImage imageWithData:self.data];
     
     STAssertNotNil(downloadedImage, @"Downloaded image was nil.");
+}
+
+- (void)testPerformBlockWithSleep {
+    
+    NSOperationQueue *backgroundQueue =
+    [[NSOperationQueue alloc] init];
+    
+    [backgroundQueue addOperationWithBlock:^{
+        
+        sleep(3);
+        
+        ZRYAssertionPerformedBeforeTimeout();
+    }];
+    
+    ZRYAssertPerformsBeforeTimout(5.0f, @"Failed to awake in time.");
 }
 
 #pragma mark - Self
