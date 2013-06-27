@@ -8,7 +8,12 @@
 
 #import "SampleProjectTests.h"
 
-@interface SampleProjectTests ()
+@interface SampleProjectTests () <
+    NSURLConnectionDelegate,
+    NSURLConnectionDataDelegate>
+
+@property (strong, nonatomic) NSURLConnection *connection;
+@property (strong, nonatomic) NSMutableData *data;
 
 - (void)performJobAfterDelay;
 - (void)finishPerformingJobAfterDelay;
@@ -25,8 +30,34 @@
     ZRYAssertPerformsBeforeTimout(6.0f, @"Failed to get any results in time.");
 }
 
+- (void)testPerformURLDownload {
+
+
+    NSURL *url =
+    [NSURL URLWithString:@"https://raw.github.com/marianoabdala/ZRYAsyncTestCase/master/Resources/Kato.jpg"];
+    
+    NSURLRequest *urlRequest =
+    [[NSURLRequest alloc] initWithURL:url];
+    
+    self.connection =
+    [[NSURLConnection alloc] initWithRequest:urlRequest
+                                    delegate:self];
+    
+    self.data =
+    [NSMutableData data];
+
+    [self.connection start];
+    
+    ZRYAssertPerformsBeforeTimout(20.0f, @"Failed to get any results in time.");
+    
+    UIImage *downloadedImage =
+    [UIImage imageWithData:self.data];
+    
+    STAssertNotNil(downloadedImage, @"Downloaded image was nil.");
+}
+
 #pragma mark - Self
-#pragma mark sampleprojectTests
+#pragma mark SampleProjectTests
 - (void)performJobAfterDelay {
     
     [self performSelector:@selector(finishPerformingJobAfterDelay)
@@ -39,5 +70,27 @@
     ZRYAssertionPerformedBeforeTimeout();
 }
 
+#pragma mark - Protocols
+#pragma mark NSURLConnectionDelegate
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+
+    STFail(error.description);
+}
+
+#pragma mark NSURLConnectionDataDelegate
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    
+    [self.data setLength:0];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    
+    [self.data appendData:data];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+ 
+    ZRYAssertionPerformedBeforeTimeout();
+}
 
 @end
