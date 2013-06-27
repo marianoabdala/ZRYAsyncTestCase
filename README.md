@@ -28,7 +28,7 @@ Ideal for testing [asynchronous NSURLConnection requests](https://github.com/mar
 1. Drag the `ZRYAsyncTestCase` folder into your tests folder.
 2. Make your test file inherit from `ZRTAsyncTestCase`, don't worry, you'll still be inheriting from `SetTestCase`.
 3. Right after starting an asynchronous operation, call `ZRYAssertPerformsBeforeTimout(,)` with your desired timeout.
-4. Once the operation is done, wherever that is, call `ZRYAssertionPerformedBeforeTimeout()`.
+4. Once the operation is done, wherever that is on the test class, call `ZRYAssertionPerformedBeforeTimeout()`.
 
 
 License
