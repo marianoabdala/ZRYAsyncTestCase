@@ -5,17 +5,19 @@ ZRYAsyncTestCase brings asynchronous unit testing to your Xcode apps, making it 
 
 **Usage sample**  
   
-    NSOperationQueue *backgroundQueue =
-    [[NSOperationQueue alloc] init];
+    - (void)testPerformBlockWithSleep {
     
-    [backgroundQueue addOperationWithBlock:^{
-    
-        sleep(3);
-    
-        ZRYAssertionPerformedBeforeTimeout();
-    }];
-    
-    ZRYAssertPerformsBeforeTimout(5.0f, @"Failed to awake in time.");
+        NSOperationQueue *backgroundQueue =
+        [[NSOperationQueue alloc] init];
+        
+        [backgroundQueue addOperationWithBlock:^{
+        
+            sleep(3);
+        
+            ZRYAssertionPerformedBeforeTimeout();
+        }];
+        
+        ZRYAssertPerformsBeforeTimout(5.0f, @"Failed to awake in time.");
 
 Works fine with NSURLConnections!
 
