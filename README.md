@@ -20,7 +20,7 @@ ZRYAsyncTestCase brings asynchronous unit testing to your Xcode apps, making it 
         ZRYAssertPerformsBeforeTimout(5.0f, @"Failed to awake in time.");
     }
 
-Ideal for testing asynchronous NSURLConnection requests!
+Ideal for testing [asynchronous NSURLConnection requests](https://github.com/marianoabdala/ZRYAsyncTestCase/blob/12a84c7f1af1a861f76c7825aef6d9d6c53fd1ca/SampleProject/SampleProjectTests/SampleProjectTests.m#L33-L56)!
 
   
 License
