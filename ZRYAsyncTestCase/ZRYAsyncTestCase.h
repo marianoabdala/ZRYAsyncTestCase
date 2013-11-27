@@ -9,9 +9,9 @@
 //
 
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
-#define ZRYAssertPerformsBeforeTimout(seconds, format...) \
+#define ZRYWaitForSeconds(seconds) \
 ({ \
     BOOL timeRemains = \
     [self waitForCompletion:seconds]; \
@@ -19,25 +19,23 @@
     self.operationFinishedPerforming = NO; \
     \
     if (timeRemains == NO) { \
-    \
-    NSString *reason = \
-    [NSString stringWithFormat:@"The operation failed to run in under %.02f seconds.", seconds]; \
-    \
-    NSException *exception = \
-    [NSException exceptionWithName:@"ZRY_TIMED_OUT" \
-                            reason:reason \
-                          userInfo:nil]; \
-    \
-    [self failWithException:exception]; \
+        \
+        NSString *description = [NSString stringWithFormat:@"Timeout after %.02f seconds.", seconds]; \
+        \
+        [self recordFailureWithDescription:description \
+                                inFile:[NSString stringWithUTF8String: __FILE__] \
+                                atLine:__LINE__ \
+                              expected:NO]; \
     } \
 })
 
-#define ZRYAssertionPerformedBeforeTimeout() \
+
+#define ZRYComplete() \
 ({ \
     self.operationFinishedPerforming = YES; \
 })
 
-@interface ZRYAsyncTestCase : SenTestCase
+@interface ZRYAsyncTestCase : XCTestCase
 
 @property (assign, nonatomic, getter = hasOperationFinishedPerforming) BOOL operationFinishedPerforming;
 

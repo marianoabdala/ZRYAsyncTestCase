@@ -22,12 +22,12 @@
 
 @implementation SampleProjectTests
 
-#pragma mark - SenTestCase
+#pragma mark - XCTestCase
 - (void)testPerformAfterDelay {
     
     [self performJobAfterDelay];
     
-    ZRYAssertPerformsBeforeTimout(6.0f, @"Failed to get any results in time.");
+    ZRYWaitForSeconds(6.0f);
 }
 
 - (void)testPerformURLDownload {
@@ -47,12 +47,12 @@
 
     [self.connection start];
     
-    ZRYAssertPerformsBeforeTimout(20.0f, @"Failed to download image in time.");
+    ZRYWaitForSeconds(20.0f);
     
     UIImage *downloadedImage =
     [UIImage imageWithData:self.data];
     
-    STAssertNotNil(downloadedImage, @"Downloaded image was nil.");
+    XCTAssertNotNil(downloadedImage, @"Downloaded image was nil.");
 }
 
 - (void)testPerformBlockWithSleep {
@@ -64,10 +64,10 @@
         
         sleep(3);
         
-        ZRYAssertionPerformedBeforeTimeout();
+        ZRYComplete();
     }];
     
-    ZRYAssertPerformsBeforeTimout(5.0f, @"Failed to awake in time.");
+    ZRYWaitForSeconds(5.0f);
 }
 
 #pragma mark - Self
@@ -81,14 +81,14 @@
 
 - (void)finishPerformingJobAfterDelay {
     
-    ZRYAssertionPerformedBeforeTimeout();
+    ZRYComplete();
 }
 
 #pragma mark - Protocols
 #pragma mark NSURLConnectionDelegate
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 
-    STFail(error.description);
+    XCTFail(@"Failed with error: %@", error.description);
 }
 
 #pragma mark NSURLConnectionDataDelegate
@@ -104,7 +104,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
  
-    ZRYAssertionPerformedBeforeTimeout();
+    ZRYComplete();
 }
 
 @end
